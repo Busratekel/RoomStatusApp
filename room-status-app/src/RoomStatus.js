@@ -1,0 +1,134 @@
+import React, { useEffect, useState } from "react";
+import config from "./config.json";
+import "./RoomStatus.css";
+
+function RoomStatus() {
+  const roomEmail = config.roomEmail;
+  const roomName = config.roomName;
+  const [events, setEvents] = useState([]);
+
+  // Toplantı verilerini her 5 dakikada bir çek
+  useEffect(() => {
+    function fetchEvents() {
+      const today = new Date();
+      const start = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
+      const end = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 14, 23, 59, 59);
+
+      const apiUrl = `/room/events?roomEmail=${encodeURIComponent(roomEmail)}&start=${start.toISOString()}&end=${end.toISOString()}`;
+      fetch(apiUrl)
+        .then((res) => res.json())
+        .then((data) => {
+          const eventsArray = Array.isArray(data) ? data : (Array.isArray(data?.events) ? data.events : []);
+          setEvents(eventsArray);
+        })
+        .catch((error) => {
+          console.error("Veri çekme hatası:", error);
+          setEvents([]);
+        });
+    }
+
+    fetchEvents(); // ilk açılışta hemen çek
+    const interval = setInterval(fetchEvents, 5 * 60 * 1000); // her 5 dakikada bir çek
+
+    return () => clearInterval(interval); // component kapanınca timer'ı temizle
+  }, [roomEmail]);
+
+  // Bugünün tarihi (yyyy-MM-dd formatında)
+  const today = new Date();
+  const todayStr = today.toISOString().slice(0, 10);
+  const now = today.getTime();
+  const eighteen = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 18, 0, 0).getTime();
+
+  // Tarih karşılaştırmasını düzelt
+  const todaysEvents = now < eighteen ? events.filter(e => e.date === todayStr) : [];
+  const futureEvents = events.filter(e => e.date !== todayStr);
+
+  // Satır rengi belirleme fonksiyonu
+  function getRowClass(event) {
+    if (!event.start || !event.end) return "";
+    const start = new Date(event.start.replace('T', ' ')).getTime();
+    const end = new Date(event.end.replace('T', ' ')).getTime();
+    if (now > end) return "row-finished"; // yeşil
+    if (now >= start && now <= end) return "row-busy"; // kırmızı
+    return "";
+  }
+
+  // Tarih formatı fonksiyonu
+  const formatDate = (dateStr) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('tr-TR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  return (
+    <div>
+      <h2>{roomName}</h2>
+      <h3>Bugünkü Toplantılar</h3>
+      <table className="meeting-table">
+        <thead>
+          <tr>
+            <th>Tarih</th>
+            <th>Başlangıç</th>
+            <th>Bitiş</th>
+            <th>Konu</th>
+            <th>Durum</th>
+          </tr>
+        </thead>
+        <tbody>
+          {!todaysEvents || todaysEvents.length === 0 ? (
+            <tr>
+              <td colSpan="5">Bugün için toplantı yok</td>
+            </tr>
+          ) : (
+            todaysEvents.map((event) => (
+              <tr key={event.id} className={getRowClass(event)}>
+                <td>{formatDate(event.date)}</td>
+                <td>{event.start ? new Date(event.start.replace('T', ' ')).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) : "-"}</td>
+                <td>{event.end ? new Date(event.end.replace('T', ' ')).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) : "-"}</td>
+                <td>{event.subject || "-"}</td>
+                <td>
+                  <span className="badge badge-danger">Dolu</span>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+
+      {futureEvents.length > 0 && (
+        <>
+          <h3 style={{ marginTop: "30px" }}>Rezerve Edilmiş Toplantılar</h3>
+          <table className="meeting-table">
+            <thead>
+              <tr>
+                <th>Tarih</th>
+                <th>Başlangıç</th>
+                <th>Bitiş</th>
+                <th>Konu</th>
+                <th>Durum</th>
+              </tr>
+            </thead>
+            <tbody>
+              {futureEvents.map((event) => (
+                <tr key={event.id}>
+                  <td>{formatDate(event.date)}</td>
+                  <td>{event.start ? new Date(event.start.replace('T', ' ')).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) : "-"}</td>
+                  <td>{event.end ? new Date(event.end.replace('T', ' ')).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) : "-"}</td>
+                  <td>{event.subject || "-"}</td>
+                  <td>
+                    <span className="badge badge-danger">Dolu</span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      )}
+    </div>
+  );
+}
+
+export default RoomStatus;

@@ -1,0 +1,149 @@
+.meeting-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.meeting-table th, .meeting-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.meeting-table th {
+  background-color: #f2f2f2;
+}
+
+.badge-danger {
+  background-color: #e53935;
+  color: #fff;
+  padding: 6px 16px;
+  border-radius: 12px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 0.9em;
+}
+.badge-success {
+  background: #b6e4c7;
+  color: #2e7d32;
+}
+
+/* Satır renklendirme */
+.row-busy {
+  background-color: #e53935 !important;
+  color: #fff !important;
+}
+
+.row-finished {
+  background-color: #4caf50 !important;
+  color: #fff !important;
+}
+
+.meeting-room-root {
+  display: flex;
+  flex-direction: row;
+  width: 900px;
+  height: 400px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.25);
+}
+
+.meeting-room-main {
+  flex: 2.2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 40px 32px 0 40px;
+  color: #fff;
+}
+
+.meeting-room-title {
+  font-size: 2.1rem;
+  color: #fff;
+  margin-bottom: 32px;
+}
+
+.meeting-room-subject {
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+  color: #fff;
+}
+
+.meeting-room-organizer {
+  font-size: 1.1rem;
+  color: #fff;
+  margin-bottom: 24px;
+}
+
+.meeting-room-time {
+  font-size: 2.2rem;
+  color: #fff;
+  margin-top: 12px;
+  letter-spacing: 2px;
+}
+
+.meeting-room-side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #1ecb5a 80%, #0e7c2f 100%);
+  padding: 32px 24px 0 24px;
+  position: relative;
+  align-items: stretch;
+}
+
+.meeting-room-clock {
+  font-size: 2.1rem;
+  font-weight: bold;
+  color: #fff;
+  background: rgba(0,0,0,0.18);
+  border-radius: 10px;
+  padding: 10px 32px;
+  text-align: center;
+  margin-bottom: 32px;
+  align-self: center;
+}
+
+.meeting-room-reservations {
+  color: #fff;
+  font-size: 0.95rem;
+  margin-bottom: auto;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.reservation-title {
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #e0ffe0;
+  font-size: 1rem;
+}
+
+.reservation-item {
+  margin-bottom: 8px;
+  color: #e0ffe0;
+  font-size: 0.95rem;
+}
+
+.meeting-room-status {
+  background: #179c3c;
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: bold;
+  border-radius: 8px 8px 0 0;
+  padding: 16px 0;
+  text-align: center;
+  letter-spacing: 2px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
