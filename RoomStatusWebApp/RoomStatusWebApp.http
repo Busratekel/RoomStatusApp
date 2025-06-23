@@ -1,0 +1,6 @@
+@RoomStatusWebApp_HostAddress = http://localhost:5079
+
+GET {{RoomStatusWebApp_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

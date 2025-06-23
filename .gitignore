@@ -1,0 +1,18 @@
+# .NET
+RoomStatusWebApp/appsettings.json
+RoomStatusWebApp/appsettings.Development.json
+RoomStatusWebApp/appsettings.Production.json
+RoomStatusWebApp/bin/
+RoomStatusWebApp/obj/
+
+# React
+
+# Genel
+*.user
+*.suo
+*.vs/
+.DS_Store
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+uyfgulama istemci kimliği.txt*
