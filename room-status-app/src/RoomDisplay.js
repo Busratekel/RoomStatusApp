@@ -114,7 +114,7 @@ function RoomDisplay() {
                 <li key={ev.id}>
                   <div className="next-date">{new Date(ev.start.replace('T', ' ')).toLocaleDateString('tr-TR', { year: 'numeric', month: '2-digit', day: '2-digit' })}</div>
                   <div className="next-row">
-                    <span className="next-subject">{ev.subject} Toplantısı</span>
+                                         <span className="next-subject">{ev.subject} Toplantısı</span>
                     <span className="next-time">
                       {new Date(ev.start.replace('T', ' ')).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}
                       {" - "}

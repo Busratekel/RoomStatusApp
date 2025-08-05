@@ -15,8 +15,6 @@ public class RoomController : ControllerBase
         _graphService = graphService;
         _dbContext = dbContext;
     }
-
-
     [HttpGet("events")]
     
     public async Task<IActionResult> GetRoomEvents(

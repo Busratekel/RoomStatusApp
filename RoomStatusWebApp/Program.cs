@@ -40,14 +40,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
 // Add Static Files middleware
 app.UseStaticFiles();
 
 // Add SPA fallback
 app.MapFallbackToFile("index.html");
 
+// CORS middleware'ini UseAuthorization'dan önce koy
 app.UseCors("AllowAll");
 app.UseAuthorization();
 app.MapControllers();
