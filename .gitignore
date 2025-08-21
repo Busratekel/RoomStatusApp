@@ -6,6 +6,15 @@ RoomStatusWebApp/bin/
 RoomStatusWebApp/obj/
 
 # React
+room-status-app/node_modules/
+room-status-app/node_modules/.cache/
+room-status-app/build/
+room-status-app/.eslintcache
+room-status-app/0.pack
+room-status-app/*.pack
+room-status-app/npm-debug.log*
+room-status-app/yarn-debug.log*
+room-status-app/yarn-error.log*
 
 # Genel
 *.user
