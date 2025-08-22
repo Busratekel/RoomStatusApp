@@ -3,23 +3,65 @@ import config from "./config.json";
 import "./RoomStatus.css";
 
 function RoomStatus() {
+  console.log("🚀 RoomStatus component başladı!");
   const roomEmail = config.roomEmail;
   const roomName = config.roomName;
   const [events, setEvents] = useState([]);
+  
+  console.log("📧 Room email:", roomEmail);
+  console.log("🏠 Room name:", roomName);
+
+  // Microsoft Graph API verilerini frontend formatına dönüştür
+  const transformEvents = (graphEvents) => {
+    if (!Array.isArray(graphEvents)) return [];
+    
+    console.log("🔍 Transform edilecek veriler:", graphEvents.length, "toplantı");
+    
+    const transformed = graphEvents.map(event => {
+      const startDate = event.start?.dateTime;
+      const endDate = event.end?.dateTime;
+      const dateStr = startDate ? new Date(startDate).toISOString().slice(0, 10) : null;
+      
+      const transformedEvent = {
+        id: event.id,
+        subject: event.subject || "Toplantı",
+        start: startDate,
+        end: endDate,
+        date: dateStr,
+        organizer: event.organizer?.emailAddress?.name || "Bilinmeyen",
+        attendees: event.attendees?.map(a => a.emailAddress?.name).filter(Boolean) || []
+      };
+      
+      console.log(`📅 Toplantı: ${transformedEvent.subject} - ${transformedEvent.date} - ${transformedEvent.start}`);
+      return transformedEvent;
+    });
+    
+    // Başlangıç saatine göre sırala
+    const sorted = transformed.sort((a, b) => {
+      if (!a.start || !b.start) return 0;
+      return new Date(a.start) - new Date(b.start);
+    });
+    
+    console.log("✅ Dönüştürülmüş toplantılar:", sorted.length);
+    return sorted;
+  };
 
   // Toplantı verilerini her 5 dakikada bir çek
   useEffect(() => {
-    function fetchEvents() {
-      const today = new Date();
-      const start = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
-      const end = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 14, 23, 59, 59);
+         function fetchEvents() {
+       // 2025 Ağustos ayındaki toplantıları al
+       const start = new Date(2025, 7, 20, 21, 0, 0); // 20 Ağustos 2025 21:00
+       const end = new Date(2025, 8, 4, 20, 59, 59);  // 4 Eylül 2025 20:59
 
       const apiUrl = `/room/events?roomEmail=${encodeURIComponent(roomEmail)}&start=${start.toISOString()}&end=${end.toISOString()}`;
       fetch(apiUrl)
         .then((res) => res.json())
         .then((data) => {
+          console.log("📡 API'den gelen ham veri:", data);
           const eventsArray = Array.isArray(data) ? data : (Array.isArray(data?.events) ? data.events : []);
-          setEvents(eventsArray);
+          const transformedEvents = transformEvents(eventsArray);
+          console.log("🔄 Dönüştürülmüş veri:", transformedEvents);
+          setEvents(transformedEvents);
         })
         .catch((error) => {
           console.error("Veri çekme hatası:", error);
@@ -33,15 +75,23 @@ function RoomStatus() {
     return () => clearInterval(interval); // component kapanınca timer'ı temizle
   }, [roomEmail]);
 
-  // Bugünün tarihi (yyyy-MM-dd formatında)
-  const today = new Date();
+  // Test için 2025 Ağustos ayındaki toplantıları göster
+  const today = new Date(2025, 7, 21); // 21 Ağustos 2025
   const todayStr = today.toISOString().slice(0, 10);
   const now = today.getTime();
-  const eighteen = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 18, 0, 0).getTime();
+  const eighteen = new Date(2025, 7, 21, 18, 0, 0).getTime();
 
-  // Tarih karşılaştırmasını düzelt
-  const todaysEvents = now < eighteen ? events.filter(e => e.date === todayStr) : [];
+  // Debug için tüm verileri logla
+  console.log("TODAY STR:", todayStr);
+  console.log("EVENTS:", events);
+  console.log("EVENTS DATES:", events.map(e => e.date));
+  
+  // Şimdilik tüm toplantıları göster
+  const todaysEvents = events.filter(e => e.date === todayStr);
   const futureEvents = events.filter(e => e.date !== todayStr);
+  
+  console.log("TODAYS EVENTS:", todaysEvents);
+  console.log("FUTURE EVENTS:", futureEvents);
 
   // Satır rengi belirleme fonksiyonu
   function getRowClass(event) {
