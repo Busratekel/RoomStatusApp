@@ -3,19 +3,13 @@ import config from "./config.json";
 import "./RoomStatus.css";
 
 function RoomStatus() {
-  console.log("🚀 RoomStatus component başladı!");
   const roomEmail = config.roomEmail;
   const roomName = config.roomName;
   const [events, setEvents] = useState([]);
-  
-  console.log("📧 Room email:", roomEmail);
-  console.log("🏠 Room name:", roomName);
 
   // Microsoft Graph API verilerini frontend formatına dönüştür
   const transformEvents = (graphEvents) => {
     if (!Array.isArray(graphEvents)) return [];
-    
-    console.log("🔍 Transform edilecek veriler:", graphEvents.length, "toplantı");
     
     const transformed = graphEvents.map(event => {
       const startDate = event.start?.dateTime;
@@ -31,8 +25,6 @@ function RoomStatus() {
         organizer: event.organizer?.emailAddress?.name || "Bilinmeyen",
         attendees: event.attendees?.map(a => a.emailAddress?.name).filter(Boolean) || []
       };
-      
-      console.log(`📅 Toplantı: ${transformedEvent.subject} - ${transformedEvent.date} - ${transformedEvent.start}`);
       return transformedEvent;
     });
     
@@ -42,7 +34,6 @@ function RoomStatus() {
       return new Date(a.start) - new Date(b.start);
     });
     
-    console.log("✅ Dönüştürülmüş toplantılar:", sorted.length);
     return sorted;
   };
 
@@ -57,10 +48,8 @@ function RoomStatus() {
       fetch(apiUrl)
         .then((res) => res.json())
         .then((data) => {
-          console.log("📡 API'den gelen ham veri:", data);
           const eventsArray = Array.isArray(data) ? data : (Array.isArray(data?.events) ? data.events : []);
           const transformedEvents = transformEvents(eventsArray);
-          console.log("🔄 Dönüştürülmüş veri:", transformedEvents);
           setEvents(transformedEvents);
         })
         .catch((error) => {
@@ -80,18 +69,11 @@ function RoomStatus() {
   const todayStr = today.toISOString().slice(0, 10);
   const now = today.getTime();
   const eighteen = new Date(2025, 7, 21, 18, 0, 0).getTime();
-
-  // Debug için tüm verileri logla
-  console.log("TODAY STR:", todayStr);
-  console.log("EVENTS:", events);
-  console.log("EVENTS DATES:", events.map(e => e.date));
   
   // Şimdilik tüm toplantıları göster
   const todaysEvents = events.filter(e => e.date === todayStr);
   const futureEvents = events.filter(e => e.date !== todayStr);
   
-  console.log("TODAYS EVENTS:", todaysEvents);
-  console.log("FUTURE EVENTS:", futureEvents);
 
   // Satır rengi belirleme fonksiyonu
   function getRowClass(event) {
