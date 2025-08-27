@@ -1,35 +1,51 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import config from "./config.json";
 import "./RoomStatus.css";
 
 function RoomStatus() {
-  const roomEmail = config.roomEmail;
-  const roomName = config.roomName;
-  const [events, setEvents] = useState([]);
+  var roomEmail = config.roomEmail;
+  var roomName = config.roomName;
+  var events = React.useState([]);
+  var setEvents = events[1];
+  events = events[0];
 
   // Microsoft Graph API verilerini frontend formatına dönüştür
-  const transformEvents = (graphEvents) => {
+  var transformEvents = function(graphEvents) {
     if (!Array.isArray(graphEvents)) return [];
     
-    const transformed = graphEvents.map(event => {
-      const startDate = event.start?.dateTime;
-      const endDate = event.end?.dateTime;
-      const dateStr = startDate ? new Date(startDate).toISOString().slice(0, 10) : null;
+    var transformed = graphEvents.map(function(event) {
+      var startDate = event.start && event.start.dateTime;
+      var endDate = event.end && event.end.dateTime;
+      var dateStr = startDate ? new Date(startDate).toISOString().slice(0, 10) : null;
       
-      const transformedEvent = {
+      var organizer = "Bilinmeyen";
+      if (event.organizer && event.organizer.emailAddress && event.organizer.emailAddress.name) {
+        organizer = event.organizer.emailAddress.name;
+      }
+      
+      var attendees = [];
+      if (event.attendees && Array.isArray(event.attendees)) {
+        attendees = event.attendees.map(function(a) {
+          return a.emailAddress && a.emailAddress.name ? a.emailAddress.name : null;
+        }).filter(function(name) {
+          return name !== null;
+        });
+      }
+      
+      var transformedEvent = {
         id: event.id,
         subject: event.subject || "Toplantı",
         start: startDate,
         end: endDate,
         date: dateStr,
-        organizer: event.organizer?.emailAddress?.name || "Bilinmeyen",
-        attendees: event.attendees?.map(a => a.emailAddress?.name).filter(Boolean) || []
+        organizer: organizer,
+        attendees: attendees
       };
       return transformedEvent;
     });
     
     // Başlangıç saatine göre sırala
-    const sorted = transformed.sort((a, b) => {
+    var sorted = transformed.sort(function(a, b) {
       if (!a.start || !b.start) return 0;
       return new Date(a.start) - new Date(b.start);
     });
@@ -38,61 +54,93 @@ function RoomStatus() {
   };
 
   // Toplantı verilerini her 5 dakikada bir çek
-  useEffect(() => {
-         function fetchEvents() {
-       // 2025 Ağustos ayındaki toplantıları al
-       const start = new Date(2025, 7, 20, 21, 0, 0); // 20 Ağustos 2025 21:00
-       const end = new Date(2025, 8, 4, 20, 59, 59);  // 4 Eylül 2025 20:59
+  React.useEffect(function() {
+    function fetchEvents() {
+      // 2025 Ağustos ayındaki toplantıları al
+      var start = new Date(2025, 7, 20, 21, 0, 0); // 20 Ağustos 2025 21:00
+      var end = new Date(2025, 8, 4, 20, 59, 59);  // 4 Eylül 2025 20:59
 
-      const apiUrl = `/room/events?roomEmail=${encodeURIComponent(roomEmail)}&start=${start.toISOString()}&end=${end.toISOString()}`;
-      fetch(apiUrl)
-        .then((res) => res.json())
-        .then((data) => {
-          const eventsArray = Array.isArray(data) ? data : (Array.isArray(data?.events) ? data.events : []);
-          const transformedEvents = transformEvents(eventsArray);
-          setEvents(transformedEvents);
-        })
-        .catch((error) => {
-          console.error("Veri çekme hatası:", error);
-          setEvents([]);
-        });
+      var apiUrl = "/room/events?roomEmail=" + encodeURIComponent(roomEmail) + "&start=" + start.toISOString() + "&end=" + end.toISOString();
+      
+      // Fetch API yerine XMLHttpRequest kullan (eski cihazlar için)
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", apiUrl, true);
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            try {
+              var data = JSON.parse(xhr.responseText);
+              var eventsArray = Array.isArray(data) ? data : (Array.isArray(data.events) ? data.events : []);
+              var transformedEvents = transformEvents(eventsArray);
+              setEvents(transformedEvents);
+            } catch (error) {
+              console.error("JSON parse hatası:", error);
+              setEvents([]);
+            }
+          } else {
+            console.error("Veri çekme hatası:", xhr.status);
+            setEvents([]);
+          }
+        }
+      };
+      xhr.onerror = function() {
+        console.error("Network hatası");
+        setEvents([]);
+      };
+      xhr.send();
     }
 
     fetchEvents(); // ilk açılışta hemen çek
-    const interval = setInterval(fetchEvents, 5 * 60 * 1000); // her 5 dakikada bir çek
+    var interval = setInterval(fetchEvents, 5 * 60 * 1000); // her 5 dakikada bir çek
 
-    return () => clearInterval(interval); // component kapanınca timer'ı temizle
+    return function() {
+      clearInterval(interval); // component kapanınca timer'ı temizle
+    };
   }, [roomEmail]);
 
   // Test için 2025 Ağustos ayındaki toplantıları göster
-  const today = new Date(2025, 7, 21); // 21 Ağustos 2025
-  const todayStr = today.toISOString().slice(0, 10);
-  const now = today.getTime();
-  const eighteen = new Date(2025, 7, 21, 18, 0, 0).getTime();
+  var today = new Date(2025, 7, 21); // 21 Ağustos 2025
+  var todayStr = today.toISOString().slice(0, 10);
+  var now = today.getTime();
+  var eighteen = new Date(2025, 7, 21, 18, 0, 0).getTime();
   
   // Şimdilik tüm toplantıları göster
-  const todaysEvents = events.filter(e => e.date === todayStr);
-  const futureEvents = events.filter(e => e.date !== todayStr);
+  var todaysEvents = events.filter(function(e) {
+    return e.date === todayStr;
+  });
+  var futureEvents = events.filter(function(e) {
+    return e.date !== todayStr;
+  });
   
 
   // Satır rengi belirleme fonksiyonu
   function getRowClass(event) {
     if (!event.start || !event.end) return "";
-    const start = new Date(event.start.replace('T', ' ')).getTime();
-    const end = new Date(event.end.replace('T', ' ')).getTime();
+    var start = new Date(event.start.replace('T', ' ')).getTime();
+    var end = new Date(event.end.replace('T', ' ')).getTime();
     if (now > end) return "row-finished"; // yeşil
     if (now >= start && now <= end) return "row-busy"; // kırmızı
     return "";
   }
 
   // Tarih formatı fonksiyonu
-  const formatDate = (dateStr) => {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('tr-TR', {
+  var formatDate = function(dateStr) {
+    var date = new Date(dateStr);
+    var options = {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
-    });
+    };
+    return date.toLocaleDateString('tr-TR', options);
+  };
+
+  // Zaman formatı fonksiyonu
+  var formatTime = function(dateStr) {
+    if (!dateStr) return "-";
+    var date = new Date(dateStr.replace('T', ' '));
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    return (hours < 10 ? '0' : '') + hours + ':' + (minutes < 10 ? '0' : '') + minutes;
   };
 
   return (
@@ -115,49 +163,51 @@ function RoomStatus() {
               <td colSpan="5">Bugün için toplantı yok</td>
             </tr>
           ) : (
-            todaysEvents.map((event) => (
-              <tr key={event.id} className={getRowClass(event)}>
-                <td>{formatDate(event.date)}</td>
-                <td>{event.start ? new Date(event.start.replace('T', ' ')).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) : "-"}</td>
-                <td>{event.end ? new Date(event.end.replace('T', ' ')).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) : "-"}</td>
-                <td>{event.subject || "-"}</td>
-                <td>
-                  <span className="badge badge-danger">Dolu</span>
-                </td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
-
-      {futureEvents.length > 0 && (
-        <>
-          <h3 style={{ marginTop: "30px" }}>Rezerve Edilmiş Toplantılar</h3>
-          <table className="meeting-table">
-            <thead>
-              <tr>
-                <th>Tarih</th>
-                <th>Başlangıç</th>
-                <th>Bitiş</th>
-                <th>Konu</th>
-                <th>Durum</th>
-              </tr>
-            </thead>
-            <tbody>
-              {futureEvents.map((event) => (
-                <tr key={event.id}>
+            todaysEvents.map(function(event) {
+              return (
+                <tr key={event.id} className={getRowClass(event)}>
                   <td>{formatDate(event.date)}</td>
-                  <td>{event.start ? new Date(event.start.replace('T', ' ')).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) : "-"}</td>
-                  <td>{event.end ? new Date(event.end.replace('T', ' ')).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) : "-"}</td>
+                  <td>{formatTime(event.start)}</td>
+                  <td>{formatTime(event.end)}</td>
                   <td>{event.subject || "-"}</td>
                   <td>
                     <span className="badge badge-danger">Dolu</span>
                   </td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </>
+              );
+            })
+          )}
+        </tbody>
+      </table>
+
+      {futureEvents.length > 0 && (
+        React.createElement("div", null,
+          React.createElement("h3", { style: { marginTop: "30px" } }, "Rezerve Edilmiş Toplantılar"),
+          React.createElement("table", { className: "meeting-table" },
+            React.createElement("thead", null,
+              React.createElement("tr", null,
+                React.createElement("th", null, "Tarih"),
+                React.createElement("th", null, "Başlangıç"),
+                React.createElement("th", null, "Bitiş"),
+                React.createElement("th", null, "Konu"),
+                React.createElement("th", null, "Durum")
+              )
+            ),
+            React.createElement("tbody", null,
+              futureEvents.map(function(event) {
+                return React.createElement("tr", { key: event.id },
+                  React.createElement("td", null, formatDate(event.date)),
+                  React.createElement("td", null, formatTime(event.start)),
+                  React.createElement("td", null, formatTime(event.end)),
+                  React.createElement("td", null, event.subject || "-"),
+                  React.createElement("td", null,
+                    React.createElement("span", { className: "badge badge-danger" }, "Dolu")
+                  )
+                );
+              })
+            )
+          )
+        )
       )}
     </div>
   );

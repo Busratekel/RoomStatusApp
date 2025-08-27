@@ -1,199 +1,31 @@
+/* Basit CSS */
+* {
+  box-sizing: border-box;
+}
+
 html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: Arial, sans-serif;
+  background-color: #181c23;
+  color: #ffffff;
 }
 
-body {
-  background: #f5f5f5;
-  overflow: hidden;
+#root {
+  height: 100%;
+  width: 100%;
 }
 
-/* Samsung TV tarayıcısı için özel CSS - sadece Samsung cihazlarda */
-.samsung-tv .room-display-flex {
-  flex-direction: row !important;
-  height: 100vh !important;
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-}
-
-.samsung-tv .room-display-main {
-  flex: 1 !important;
-  padding: 20px !important;
-  background: #181c23 !important;
-  position: relative !important;
-}
-
-.samsung-tv .room-next-green {
-  flex: 1 !important;
-  padding: 30px !important;
-  background: #1ecb5a !important;
-}
-
-.samsung-tv .room-title {
-  font-size: 2.5rem !important;
-  font-weight: bold !important;
-  color: #fff !important;
-  margin-bottom: 20px !important;
-  margin-top: 40px !important;
-}
-
-.samsung-tv .room-clock {
-  font-size: 2.5rem !important;
-  font-weight: bold !important;
-  color: #8fffa0 !important;
-  background: #222 !important;
-  padding: 10px 20px !important;
-  margin-bottom: 20px !important;
-  text-align: center !important;
-}
-
-.samsung-tv .room-clock-green {
-  font-size: 2.5rem !important;
-  font-weight: bold !important;
-  color: #181c23 !important;
-  background: #ccc !important;
-  padding: 10px 20px !important;
-  margin-bottom: 20px !important;
-  text-align: center !important;
-}
-
-.samsung-tv .meeting-subject {
-  font-size: 1.8rem !important;
-  font-weight: bold !important;
-  color: #fff !important;
-  margin-bottom: 10px !important;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.5) !important;
-}
-
-.samsung-tv .meeting-organizer {
-  font-size: 1.8rem !important;
-  color: #fff !important;
-  margin-bottom: 15px !important;
-  margin-top: 20px !important;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.5) !important;
-}
-
-.samsung-tv .meeting-time {
-  font-size: 2.2rem !important;
-  font-weight: bold !important;
-  color: #fff !important;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.5) !important;
-}
-
-.samsung-tv .meeting-free {
-  font-size: 2.2rem !important;
-  font-weight: bold !important;
-  color: #8fffa0 !important;
-}
-
-.samsung-tv .room-status-box {
-  position: absolute !important;
-  bottom: 50px !important;
-  left: 20px !important;
-  right: 20px !important;
-  width: calc(100% - 40px) !important;
-  height: 80px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  font-size: 3rem !important;
-  font-weight: bold !important;
-  color: #fff !important;
-  text-align: center !important;
-  padding: 15px !important;
-  border: 5px solid #fff !important;
-  background: #e53935 !important;
-  z-index: 1000 !important;
-}
-
-.samsung-tv .room-status-box.free {
-  background: #179c3c !important;
-  color: #fff !important;
-}
-
-.samsung-tv .room-status-box.busy {
-  background: #e53935 !important;
-  color: #fff !important;
-}
-
-.samsung-tv .next-title-green {
-  font-size: 1.8rem !important;
-  font-weight: bold !important;
-  color: #181c23 !important;
-  margin-bottom: 15px !important;
-  margin-top: 15px !important;
-}
-
-.samsung-tv .room-next-green li {
-  font-size: 1.5rem !important;
-  background: rgba(0, 0, 0, 0.1) !important;
-  padding: 10px !important;
-  margin-bottom: 10px !important;
-  flex-shrink: 0 !important;
-}
-
-.samsung-tv .next-content {
-  margin-top: 0 !important;
-}
-
-.samsung-tv .next-time {
-  font-size: 1.5rem !important;
-  color: #000 !important;
-  font-weight: bold !important;
-}
-
-.samsung-tv .next-subject {
-  font-size: 1.5rem !important;
-  color: #000 !important;
-  font-weight: bold !important;
-}
-
-.samsung-tv .next-date {
-  font-size: 1.5rem !important;
-  color: #000 !important;
-  font-weight: bold !important;
-}
-
-.samsung-tv .next-organizer {
-  font-size: 1.3rem !important;
-  color: #000 !important;
-}
-
-.samsung-tv .no-next {
-  color: #222 !important;
-  font-size: 1.3rem !important;
-}
-
-/* Normal CSS - Samsung TV değilse */
-.app-tablet-center {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
+/* Temel layout */
 .room-display-flex {
   width: 100vw;
   height: 100vh;
-  min-width: unset;
-  min-height: unset;
   margin: 0;
-  border-radius: 0;
-  box-shadow: none;
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
+  padding: 0;
   background: #181c23;
-  -webkit-overflow-scrolling: touch;
-  overflow: hidden;
+  color: #ffffff;
+  font-family: Arial, sans-serif;
   position: fixed;
   top: 0;
   left: 0;
@@ -202,348 +34,111 @@ body {
 }
 
 .room-display-main {
-  flex: 1;
-  background: #181c23;
-  padding: 32px 24px 24px 24px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  width: 50%;
   height: 100%;
-  position: relative;
-  border-radius: 0;
+  float: left;
+  background: #181c23;
+  padding: 20px;
+  color: #ffffff;
 }
 
-.room-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 24px;
+.room-next-green {
+  width: 50%;
+  height: 100%;
+  float: right;
+  background: #1ecb5a;
+  padding: 20px;
+  color: #181c23;
 }
 
+/* Temel stiller */
 .room-title {
-  font-size: 2.4rem;
+  font-size: 36px;
   font-weight: bold;
-  margin-bottom: 36px;
-  margin-top: 120px;
-  color: #fff;
-}
-
-.room-clock {
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: #8fffa0;
-  background: #222;
-  border-radius: 10px;
-  padding: 8px 24px;
-  min-width: 120px;
-  text-align: center;
-  align-self: flex-end;
-  margin-bottom: 32px;
+  margin-bottom: 40px;
 }
 
 .room-main {
-  margin-bottom: 18px;
-  font-size: 1.5rem;
-}
-
-.meeting-subject {
-  font-size: 1.3rem;
-  margin-bottom: 12px;
-  color: #fff;
-}
-
-.meeting-organizer {
-  font-size: 2.0rem;
-  color: #fff;
-  margin-bottom: 44px;
   margin-top: 20px;
 }
 
+.meeting-organizer {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
 .meeting-time {
-  font-size: 2rem;
-  font-weight: bold;
-  margin-top: auto;
-  color: #fff;
+  font-size: 24px;
+  margin-bottom: 20px;
 }
 
 .meeting-free {
-  font-size: 2rem;
-  color: #8fffa0;
-  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 20px;
 }
 
 .room-status-box {
-  position: absolute;
-  bottom: 64px;
-  left: 0;
-  right: 0;
-  width: 100%;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2.5rem;
+  font-size: 48px;
   font-weight: bold;
-  border-radius: 18px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
-  user-select: none;
   text-align: center;
-  z-index: 10;
-  padding: 0 32px;
-  box-sizing: border-box;
-  margin: 0 auto;
+  padding: 20px;
+  border-radius: 10px;
 }
 
 .room-status-box.free {
   background: #179c3c;
-  color: #fff;
-  justify-content: center;
+  color: #ffffff;
 }
 
 .room-status-box.busy {
   background: #e53935;
-  color: #fff;
-  justify-content: center;
+  color: #ffffff;
 }
 
-.available-transparent {
-  margin-top: auto;
-  margin-bottom: 32px;
-  align-self: center;
-  text-align: center;
-  font-size: 1.5rem;
+.room-clock {
+  font-size: 36px;
   font-weight: bold;
-  color: #fff;
-  background: rgba(30, 203, 90, 0.65);
-  border-radius: 0;
-  padding: 12px 0;
-  letter-spacing: 2px;
-  user-select: none;
-  box-shadow: none;
-  text-shadow: none;
-  width: 180px;
-  display: block;
-  transition: background 0.2s;
-}
-
-.room-next-green {
-  flex: 1.2;
-  background: #1ecb5a;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  height: 100%;
-  padding: 32px 24px 24px 24px;
-  position: relative;
-  border-radius: 0;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .room-clock-green {
-  align-self: center;
-  font-size: 2.5rem;
-  font-weight: bold;
   color: #181c23;
-  background: gainsboro;
-  border-radius: 10px;
-  padding: 12px 36px;
-  margin-bottom: 40px;
 }
 
 .next-content {
-  flex: 1 1 auto;
-  overflow: visible;
-  margin-bottom: 24px;
-  margin-top: 50px;
+  margin-top: 20px;
 }
 
 .next-title-green {
-  font-size: 1.5rem;
-  color: #181c23;
+  font-size: 20px;
   font-weight: bold;
-  margin-bottom: 18px;
-  letter-spacing: 1px;
+  margin-bottom: 20px;
+  color: #181c23;
 }
 
 .no-next {
-  color: #222;
-  font-size: 1.1rem;
+  font-size: 16px;
+  color: #181c23;
 }
 
-.room-next-green ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  background-color: transparent;
-}
-
-.room-next-green li {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  font-size: 1.5rem;
-  margin-bottom: 12px;
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 0;
-  padding: 8px 8px;
-  flex-shrink: 0;
-}
-
-.next-time {
-  color: black;
-  font-size: 1.5rem;
-  min-width: 90px;
-  display: inline-block;
-  flex-shrink: 0;
-  text-align: right;
-}
-
-.next-subject {
-  font-size: 1.3rem;
-  color: black;
-  font-weight: 400;
-  margin-top: 4px;
-  text-align: left;
-}
-
-.next-date {
-  font-size: 1.5rem;
-  color: black;
-  margin-bottom: 4px;
-  margin-right: 16px;
-}
-
-.next-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.next-organizer {
-  font-size: 1.4rem;
-  color: black;
-  font-weight: bold;
-  flex: 1;
-  text-align: left;
-}
-
-/* Responsive tasarım */
-@media (max-width: 1000px) {
-  .room-display-flex {
-    flex-direction: column;
-    width: 100vw;
-    height: auto;
-    min-width: unset;
-    min-height: unset;
-    border-radius: 0;
-  }
-  .room-display-main, .room-next-green {
-    flex: 1 1 0%;
+/* Responsive */
+@media (max-width: 768px) {
+  .room-display-main,
+  .room-next-green {
     width: 100%;
-    padding: 12px 2vw 12px 2vw;
-    box-sizing: border-box;
+    float: none;
   }
+  
   .room-title {
-    font-size: 2.2rem;
-    margin-bottom: 16px;
-  }
-  .meeting-subject, .meeting-organizer, .meeting-time {
-    font-size: 1rem;
-  }
-  .room-clock, .room-clock-green {
-    font-size: 1.2rem;
-    min-width: 60px;
-    padding: 4px 10px;
-    margin-bottom: 16px;
-    border-radius: 10px;
+    font-size: 24px;
   }
   
-  /* Küçük ekranlarda scroll geri ekle */
-  .next-content {
-    max-height: 40vh;
-    overflow-y: auto;
+  .room-status-box {
+    font-size: 32px;
   }
   
-  .room-next-green li {
-    font-size: 1.2rem;
-    padding: 6px 6px;
-    margin-bottom: 8px;
+  .room-clock {
+    font-size: 24px;
   }
-  
-  .next-time, .next-subject, .next-date {
-    font-size: 1.2rem;
-  }
-  
-  .next-organizer {
-    font-size: 1.1rem;
-  }
-}
-
-@media (max-width: 600px) {
-  .room-display-flex {
-    flex-direction: column;
-    width: 100vw;
-    height: auto;
-    min-width: unset;
-    min-height: unset;
-    border-radius: 0;
-  }
-  .room-display-main, .room-next-green {
-    flex: 1 1 0%;
-    width: 100%;
-    padding: 6px 1vw 6px 1vw;
-    box-sizing: border-box;
-  }
-  .room-title {
-    font-size: 2.2rem;
-    margin-bottom: 8px;
-  }
-  .meeting-subject, .meeting-organizer, .meeting-time {
-    font-size: 0.9rem;
-  }
-  .room-clock, .room-clock-green {
-    font-size: 1rem;
-    min-width: 40px;
-    padding: 2px 4px;
-    margin-bottom: 8px;
-    border-radius: 10px;
-  }
-  
-  /* Mobilde daha küçük scroll alanı */
-  .next-content {
-    max-height: 30vh;
-    overflow-y: auto;
-  }
-  
-  .room-next-green li {
-    font-size: 1rem;
-    padding: 4px 4px;
-    margin-bottom: 6px;
-  }
-  
-  .next-time, .next-subject, .next-date {
-    font-size: 1rem;
-  }
-  
-  .next-organizer {
-    font-size: 0.9rem;
-  }
-}
-
-.meeting-room-main {
-  flex: 2.2;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  padding: 40px 32px 0 40px;
-  background: #181c23;
-  color: #fff;
-}
-
-.meeting-room-title, .meeting-room-subject, .meeting-room-organizer, .meeting-room-time {
-  color: #fff;
-}
-
-.room-next-green, .room-display-main {
-  position: relative;
 }
