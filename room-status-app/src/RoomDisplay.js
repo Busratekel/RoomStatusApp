@@ -112,7 +112,7 @@ function RoomDisplay() {
          try {
        var today = new Date();
        var start = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
-       var end = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 14, 23, 59, 59);
+       var end = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 3, 23, 59, 59);
       
       var apiUrl = "/room/events?roomEmail=" + encodeURIComponent(email) + 
                   "&start=" + encodeURIComponent(toIsoUtcString(start)) + 
@@ -289,7 +289,16 @@ function RoomDisplay() {
                fontSize: "52px",
                marginBottom: "20px"
              }
-           }, "Düzenleyen: " + (current ? (current.organizer || current.subject) : "-")),
+           }, "Düzenleyen: " + (current ? current.organizer : "-")),
+           
+           // Toplantı konusu satırı
+           React.createElement("div", {
+             style: {
+               fontSize: "48px",
+               marginBottom: "20px",
+               fontWeight: "bold"
+             }
+           }, current ? ("Konu: " + current.subject) : "Konu: -"),
            
            // Saat aralığı
            React.createElement("div", {
@@ -370,7 +379,7 @@ function RoomDisplay() {
                     backgroundColor: "rgba(0,0,0,0.1)"
                   }
                 },
-                  // Tarih ve saat aynı satırda
+                  // Toplantı Tarihi ve saat aynı satırda
                   React.createElement("div", {
                     style: {
                       fontSize: "26px",
@@ -380,20 +389,57 @@ function RoomDisplay() {
                       alignItems: "center"
                     }
                   },
-                    React.createElement("span", null, formatDate(event3.start)),
+                    React.createElement("span", {
+                      style: {
+                        fontWeight: "normal"
+                      }
+                    }, [
+                      React.createElement("span", {
+                        key: "label",
+                        style: {
+                          fontWeight: "bold"
+                        }
+                      }, "Toplantı Tarihi: "),
+                      formatDate(event3.start)
+                    ]),
                     React.createElement("span", {
                       style: {
                         fontWeight: "bold"
                       }
                     }, formatTime(event3.start) + " - " + formatTime(event3.end))
                   ),
-                  // İsim ayrı satırda
+                  // Organizatör ayrı satırda
                   React.createElement("div", {
                     style: {
-                      fontWeight: "bold",
-                      fontSize: "28px"
+                      fontSize: "26px",
+                      marginBottom: "4px",
+                      fontWeight: "normal"
                     }
-                  }, event3.subject)
+                  }, [
+                    React.createElement("span", {
+                      key: "label",
+                      style: {
+                        fontWeight: "bold"
+                      }
+                    }, "Düzenleyen: "),
+                    event3.organizer
+                  ]),
+                  
+                  // Konu ayrı satırda
+                  React.createElement("div", {
+                    style: {
+                      fontWeight: "normal",
+                      fontSize: "26px"
+                    }
+                  }, [
+                    React.createElement("span", {
+                      key: "label",
+                      style: {
+                        fontWeight: "bold"
+                      }
+                    }, "Konu: "),
+                    event3.subject
+                  ])
                 );
               })
            )
