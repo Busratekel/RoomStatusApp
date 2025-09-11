@@ -256,6 +256,11 @@ function RoomDisplay() {
           justifyContent: "space-between"
         }
       },
+        // Sol üstte tarih rozeti
+        React.createElement("div", {
+          className: "left-date-badge"
+        }, formatDate(now)),
+
         // Üst kısım
         React.createElement("div", {
           style: {
